@@ -2,14 +2,18 @@ import React from 'react';
 import { Layout } from "./layout";
 import { Dashboard } from "./pages/dashboard";
 import { Route, Routes } from "react-router-dom";
+import { Header } from "./components/header/Header";
 
 function App() {
     return (
-        <Layout>
-            <Routes>
-                <Route path="/" element={ <Dashboard/> }/>
-            </Routes>
-        </Layout>
+        <>
+            <Header/>
+            <Layout>
+                <Routes>
+                    <Route path="/" element={ <Dashboard/> }/>
+                </Routes>
+            </Layout>
+        </>
     );
 }
 

@@ -52,5 +52,6 @@ export const weatherApi = createApi({
 });
 
 export const {
-    useGetWeekWeatherQuery
+    useGetWeekWeatherQuery,
+    useLazyGetWeekWeatherQuery
 } = weatherApi;

@@ -1,15 +1,15 @@
 import React, { FC, useEffect, useState } from 'react';
-import { useGetWeekWeatherQuery } from "../../store/weather/weather.api";
+import { useGetWeekWeatherQuery, useLazyGetWeekWeatherQuery } from "../../store/weather/weather.api";
 import { useDebounce } from "../../hooks";
 
 export const Header: FC = () => {
     const [position, setPosition] = useState<number[]>();
     const [isPositionError, setIsPositionError] = useState(false);
     const [searchValue, setSearchValue] = useState<string>();
-    const [location, setLocation] = useState<string>();
+    const [location, setLocation] = useState<string>("");
 
     const debounce = useDebounce(searchValue, 1000);
-    const { data: weather } = useGetWeekWeatherQuery({ location });
+    const [trigger, { data }] = useLazyGetWeekWeatherQuery();
 
     const success: PositionCallback = (position) => {
         const { coords: { latitude, longitude } } = position;
@@ -24,15 +24,17 @@ export const Header: FC = () => {
     useEffect(() => {
         const options: PositionOptions = {
             timeout: 5000,
-            maximumAge: 0
+            maximumAge: Infinity
         }
         navigator.geolocation.getCurrentPosition(success, error, options);
+
+        // position && trigger({ location: position?.join() });
     }, [setPosition]);
 
     useEffect(() => {
-        weather && console.log(weather);
-        position && console.log(position);
-    }, [position, weather]);
+        // refetch TODO
+        // setLocation(data)
+    }, [debounce]);
 
     return (
         <header>
