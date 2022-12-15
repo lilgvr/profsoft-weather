@@ -1,16 +1,22 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { setupListeners } from "@reduxjs/toolkit/query";
-import { weatherApi } from "./weather/weather.api";
-import { weatherReducer } from "./weather/weather.slice";
+import { weatherApi } from "./weather";
+import { weatherReducer } from "./weather";
+import { geolocationApi, geolocationReducer } from "./geolocation";
 
 export const rootReducer = combineReducers({
     [weatherApi.reducerPath]: weatherApi.reducer,
-    weather: weatherReducer
+    [geolocationApi.reducerPath]: geolocationApi.reducer,
+    weather: weatherReducer,
+    geolocation: geolocationReducer
 })
 
 export const store = configureStore({
         reducer: rootReducer,
-        middleware: getDefaultMiddleware => getDefaultMiddleware().concat(weatherApi.middleware)
+        middleware: getDefaultMiddleware => getDefaultMiddleware().concat(
+            weatherApi.middleware,
+            geolocationApi.middleware
+        )
     })
 ;
 

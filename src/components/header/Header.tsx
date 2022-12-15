@@ -2,7 +2,8 @@ import React, { FC, FormEvent, useEffect, useRef, useState } from 'react';
 import styles from "./header.module.scss";
 import { useActions, useAppSelector, useDebounceButton } from "../../hooks";
 import { Link, useLocation } from "react-router-dom";
-import { useLazyGetWeekWeatherQuery } from "../../store/weather/weather.api";
+import { useLazyGetWeekWeatherQuery } from "../../store/weather";
+import { useLazyGetGeolocationByCoordinatesQuery } from "../../store/geolocation";
 
 export const Header: FC = () => {
     const [searchValue, setSearchValue] = useState<string>();
@@ -18,10 +19,11 @@ export const Header: FC = () => {
     const { positionSuccess, positionError, setWeather } = useActions();
     const [trigger, { data }] = useLazyGetWeekWeatherQuery();
 
+    const [geoTrigger, { data: geoData }] = useLazyGetGeolocationByCoordinatesQuery();
+
     const success: PositionCallback = (position) => {
         const { coords: { latitude, longitude } } = position;
         const res = [latitude, longitude];
-        console.log(res);
 
         setUserPosition(res);
         positionSuccess(res);
@@ -44,7 +46,8 @@ export const Header: FC = () => {
 
     useEffect(() => {
         if (userPosition && !isPositionError) {
-            setUserLocation(userPosition?.join())
+            setUserLocation(userPosition?.join());
+            geoTrigger({ lat: userPosition[0], lon: userPosition[1] });
             // trigger({ location: userLocation });
             data && console.log(data);
         }
@@ -53,6 +56,12 @@ export const Header: FC = () => {
     useEffect(() => {
 
     }, [debounce]);
+
+    useEffect(() => {
+        if (geoData) {
+            setUserLocation(geoData);
+        }
+    }, [geoData]);
 
     const handleInputChange = (e: FormEvent<HTMLInputElement>) => {
         const target = e.target as HTMLInputElement;

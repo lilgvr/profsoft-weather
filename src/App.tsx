@@ -10,8 +10,6 @@ function App() {
     const { setWeather } = useActions();
 
     useEffect(() => {
-        console.log(weather)
-        // setWeather(stateMock);
         if (weather && !isPositionError) {
             setWeather(weather);
         }
