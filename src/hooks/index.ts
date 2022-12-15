@@ -1,4 +1,3 @@
 export * from './redux'
-export * from './actions'
+export * from './useActions'
 export * from './useDebounce';
-export * from './useGeolocation';

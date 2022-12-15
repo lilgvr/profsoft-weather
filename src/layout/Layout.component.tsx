@@ -1,13 +1,16 @@
 import React from "react";
-import type {FC} from 'react';
+import type { FC } from 'react';
+import { Header } from "../components/header";
+import { Outlet } from "react-router-dom";
 
-const Layout: FC<React.PropsWithChildren> = ({children}) => {
+const Layout: FC = () => {
+    return (
+        <>
+            <Header/>
 
-  return (
-    <>
-      {children}
-    </>
-  );
+            <Outlet/>
+        </>
+    );
 };
 
-export {Layout};
+export { Layout };

@@ -1,0 +1,35 @@
+@import "/src/styles/colors";
+
+.measureCtr {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 80%;
+    gap: 1.5vw;
+
+
+    img {
+        $wh: 15%;
+        width: $wh;
+        height: $wh;
+    }
+
+    p {
+        font-size: 1.25vw;
+        color: $white;
+
+        &:first-of-type {
+            text-align: left;
+            display: block;
+            width: 50%;
+        }
+
+        &:last-of-type {
+            display: block;
+            text-align: right;
+
+            width: 30%;
+        }
+    }
+}

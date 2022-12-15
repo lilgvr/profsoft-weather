@@ -1,0 +1,9 @@
+@import '/src/styles/colors';
+@import '/src/styles/mixins';
+
+.daysCtr {
+    @include todayPage-ctr;
+    justify-content: flex-start;
+
+    border-top: 3px solid $accent-color;
+}

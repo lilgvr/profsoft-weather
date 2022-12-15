@@ -12,12 +12,31 @@ export const formatDate = (d: number): string => {
     return [year, month, day].join('-');
 }
 
-export const addDays = (date: number, days: number) => {
-    const res = new Date(date);
-    res.setDate(res.getDate() + days);
-    return res;
-}
+export const getLocalizedDate = (date: Date) => {
+    const months = [
+        "января",
+        "февраля",
+        "марта",
+        "апреля",
+        "мая",
+        "июня",
+        "июля",
+        "августа",
+        "сентября",
+        "октября",
+        "ноября",
+        "декабря"
+    ];
 
-export const formatDateAddDays = (date: number, days: number) => {
-    return formatDate(addDays(date, days).getTime());
+    const weekDays = [
+        "Вс",
+        "Пн",
+        "Вт",
+        "Ср",
+        "Чт",
+        "Пт",
+        "Сб"
+    ]
+
+    return `${ weekDays[date.getDay()] }, ${ date.getDate() } ${ months[date.getMonth()] }`
 }

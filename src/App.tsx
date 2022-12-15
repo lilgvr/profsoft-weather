@@ -1,18 +1,26 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Layout } from "./layout";
-import { Dashboard } from "./pages/dashboard";
+import { TodayPage } from "./pages/today";
 import { Route, Routes } from "react-router-dom";
-import { Header } from "./components/header/Header";
+import { DayPage } from "./pages/day";
+import { useActions } from "./hooks";
+import { stateMock } from "./mocks/WeatherResponseJson";
 
 function App() {
+    const { setWeather } = useActions();
+
+    useEffect(() => {
+        setWeather(stateMock);
+    }, [setWeather]);
+
     return (
         <>
-            <Header/>
-            <Layout>
-                <Routes>
-                    <Route path="/" element={ <Dashboard/> }/>
-                </Routes>
-            </Layout>
+            <Routes>
+                <Route path="/" element={ <Layout/> }>
+                    <Route index element={ <TodayPage/> }/>
+                    <Route path="day/:date" element={ <DayPage/> }/>
+                </Route>
+            </Routes>
         </>
     );
 }

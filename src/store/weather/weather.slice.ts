@@ -19,7 +19,7 @@ const weatherSlice = createSlice({
     }
 });
 
-const weatherAction = weatherSlice.actions;
+const weatherActions = weatherSlice.actions;
 const weatherReducer = weatherSlice.reducer;
 
-export { weatherSlice, weatherAction, weatherReducer };
+export { weatherSlice, weatherActions, weatherReducer };

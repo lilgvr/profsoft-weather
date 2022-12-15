@@ -1,0 +1,60 @@
+@import '/src/styles/colors';
+
+.todayPageCtr {
+    .mainInfo {
+        margin-left: 5%;
+
+        .city {
+            margin-bottom: 5vw;
+
+            h2 {
+                color: $white;
+                font-size: 1.75vw;
+                margin-bottom: 2vw;
+            }
+
+            h3 {
+                color: $accent-color;
+                font-size: 1.25vw;
+            }
+        }
+
+        .weather {
+            display: flex;
+            flex-direction: row;
+            align-items: baseline;
+            margin-bottom: 3vw;
+            gap: 2vw;
+
+            p:first-of-type {
+                font-size: 5vw;
+                color: $white;
+            }
+
+            p:last-of-type {
+                color: $secondary-color;
+                font-size: 1.25vw;
+
+                span {
+                    color: $accent-color;
+                    font-size: 1.5vw;
+
+                    margin-left: .5vw;
+                }
+            }
+        }
+
+        & > p {
+            color: $white;
+            font-size: 1.5vw;
+        }
+    }
+
+    .measures {
+        margin-left: 5%;
+        width: 25%;
+        display: flex;
+        flex-direction: column;
+        gap: 1vw;
+    }
+}

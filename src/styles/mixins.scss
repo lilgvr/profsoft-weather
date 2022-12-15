@@ -1,0 +1,30 @@
+@import "./colors";
+
+@mixin todayPage-ctr {
+    height: 46vh;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+@mixin weather-icon {
+    height: 100%;
+    width: 20%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+
+    img {
+        margin-top: 20%;
+        height: 40%;
+    }
+
+    figcaption {
+        margin-top: 20%;
+        color: $accent-color;
+        font-size: 1.5vw;
+    }
+}
