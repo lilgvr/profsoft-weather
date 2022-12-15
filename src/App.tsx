@@ -3,15 +3,19 @@ import { Layout } from "./layout";
 import { TodayPage } from "./pages/today";
 import { Route, Routes } from "react-router-dom";
 import { DayPage } from "./pages/day";
-import { useActions } from "./hooks";
-import { stateMock } from "./mocks/WeatherResponseJson";
+import { useActions, useAppSelector } from "./hooks";
 
 function App() {
+    const { weather, isPositionError } = useAppSelector(state => state.weather);
     const { setWeather } = useActions();
 
     useEffect(() => {
-        setWeather(stateMock);
-    }, [setWeather]);
+        console.log(weather)
+        // setWeather(stateMock);
+        if (weather && !isPositionError) {
+            setWeather(weather);
+        }
+    }, [isPositionError, setWeather, weather]);
 
     return (
         <>

@@ -1,50 +1,68 @@
-import React, { FC, FormEvent, useEffect, useState } from 'react';
+import React, { FC, FormEvent, useEffect, useRef, useState } from 'react';
 import styles from "./header.module.scss";
-import { useAppSelector, useDebounce } from "../../hooks";
+import { useActions, useAppSelector, useDebounceButton } from "../../hooks";
 import { Link, useLocation } from "react-router-dom";
-import { stateMock } from "../../mocks/WeatherResponseJson";
+import { useLazyGetWeekWeatherQuery } from "../../store/weather/weather.api";
 
 export const Header: FC = () => {
-    const { weather } = useAppSelector(state => state.weather);
-
     const [searchValue, setSearchValue] = useState<string>();
-    const debounce = useDebounce(searchValue, 1000);
-    const location = useLocation();
-
-    /*const [position, setPosition] = useState<number[]>();
+    const [userPosition, setUserPosition] = useState<number[]>();
+    const [userLocation, setUserLocation] = useState<string>("");
     const [isPositionError, setIsPositionError] = useState(false);
 
-    const [userLocation, setUserLocation] = useState<string>("");
+    const submitButton = useRef<HTMLButtonElement>(null);
+    const debounce = useDebounceButton(searchValue, 1000, submitButton);
+    const location = useLocation();
+
+    const { weather } = useAppSelector(state => state.weather);
+    const { positionSuccess, positionError, setWeather } = useActions();
     const [trigger, { data }] = useLazyGetWeekWeatherQuery();
 
     const success: PositionCallback = (position) => {
         const { coords: { latitude, longitude } } = position;
+        const res = [latitude, longitude];
+        console.log(res);
 
-        setPosition([latitude, longitude]);
+        setUserPosition(res);
+        positionSuccess(res);
     }
 
-    const error: PositionErrorCallback = (positionError) => {
+    const error: PositionErrorCallback = (error) => {
+        console.log(error.message);
         setIsPositionError(true);
+        positionError(null);
     }
 
     useEffect(() => {
         const options: PositionOptions = {
             timeout: 5000,
-            maximumAge: Infinity
+            maximumAge: Infinity,
+            enableHighAccuracy: true
         }
         navigator.geolocation.getCurrentPosition(success, error, options);
-
-        position && trigger({ location: position?.join() });
-    }, [setPosition]);*/
+    }, [setUserPosition]);
 
     useEffect(() => {
-        // refetch TODO
-        debounce && console.log(debounce)
+        if (userPosition && !isPositionError) {
+            setUserLocation(userPosition?.join())
+            // trigger({ location: userLocation });
+            data && console.log(data);
+        }
+    }, [data, isPositionError, trigger, userLocation, userPosition]);
+
+    useEffect(() => {
+
     }, [debounce]);
 
     const handleInputChange = (e: FormEvent<HTMLInputElement>) => {
         const target = e.target as HTMLInputElement;
         setSearchValue(target.value);
+    }
+
+    const handleSubmit = () => {
+        if (submitButton.current?.disabled) return;
+
+        console.log('submit')
     }
 
     return (
@@ -63,7 +81,11 @@ export const Header: FC = () => {
                             id="city-input"
                             onChange={ handleInputChange }
                         />
-                        <button type="submit">
+                        <button
+                            type="submit"
+                            ref={ submitButton }
+                            onClick={ handleSubmit }
+                        >
                             Поиск
                         </button>
                     </div>

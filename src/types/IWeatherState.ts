@@ -2,6 +2,6 @@ import { IWeatherResponse } from "../models";
 
 export interface IWeatherState {
     weather: IWeatherResponse | null
-    positionError: boolean,
+    isPositionError: boolean,
     position?: number[]
 }

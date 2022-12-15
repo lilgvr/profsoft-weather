@@ -38,14 +38,12 @@ export const weatherApi = createApi({
     ...weatherApiOptions,
     endpoints: build => ({
         getWeekWeather: build.query({
-            query: (args) => {
-                return {
-                    url: `/${ args.location }/next6days`,
-                    params: {
-                        ...baseQueryParams
-                    }
+            query: (args) => ({
+                url: `/${ args.location }/next6days`,
+                params: {
+                    ...baseQueryParams
                 }
-            },
+            }),
             transformResponse: (response: IWeatherResponse) => fromResponseDto(response)
         }),
     })

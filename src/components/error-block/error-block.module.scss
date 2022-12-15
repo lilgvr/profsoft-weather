@@ -1,0 +1,14 @@
+@import "/src/styles/colors";
+
+.errorBlock {
+    width: 100%;
+    height: 92vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    p {
+        font-size: 1.5vw;
+        color: $white;
+    }
+}

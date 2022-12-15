@@ -57,6 +57,16 @@
                     background-color: $accent-color;
                     color: $background-color;
                 }
+
+                &:disabled {
+                    background-color: $disabled-bg;
+                    border-color: $disabled-fore;
+                    color: $disabled-fore;
+
+                    &:hover {
+                        cursor: not-allowed;
+                    }
+                }
             }
 
             a {
