@@ -1,10 +1,12 @@
 import { useDispatch } from "react-redux";
 import { bindActionCreators } from '@reduxjs/toolkit'
-import { weatherActions } from "../store/weather/weather.slice";
+import { weatherActions } from "../store/weather";
+import { geolocationActions } from "../store/geolocation";
 
 
 const actions = {
-    ...weatherActions
+    ...weatherActions,
+    ...geolocationActions
 }
 
 const useActions = () => {

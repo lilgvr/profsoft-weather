@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { IWeatherState } from "../../types/IWeatherState";
+import { IWeatherState } from "../../types";
 import { STORAGE_KEY } from "../../utils/constants";
 
-const initialState: IWeatherState = {
+const initialState: IWeatherState = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "{}") ?? {
     weather: null,
     isPositionError: false,
 }
@@ -13,18 +13,6 @@ const weatherSlice = createSlice({
     reducers: {
         setWeather: (state, action) => {
             state.weather = action.payload;
-
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-        },
-        positionSuccess: (state, action) => {
-            state.isPositionError = false;
-            state.position = action.payload.position;
-
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-        },
-        positionError: (state, action) => {
-            state.isPositionError = true;
-            state.position = undefined;
 
             localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
         },

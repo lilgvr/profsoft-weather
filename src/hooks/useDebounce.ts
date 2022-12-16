@@ -4,6 +4,7 @@ export const useDebounce = <T = string>(val: T, delay: number): T => {
     const [debounceVal, setDebounceVal] = useState(val);
 
     useEffect(() => {
+        if (!val) return;
         const handler = setTimeout(() => {
             setDebounceVal(val);
         }, delay)
@@ -22,10 +23,10 @@ export const useDebounceButton = <T = string>(val: T, delay: number, ref: RefObj
     useEffect(() => {
         const refCurrent = ref.current;
         const handler = setTimeout(() => {
-            setDebounceVal(val);
             if (refCurrent) {
                 refCurrent.disabled = false;
             }
+            setDebounceVal(val);
         }, delay)
 
         return () => {

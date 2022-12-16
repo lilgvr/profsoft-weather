@@ -1,5 +1,4 @@
-import { IGeolocationResponse } from "../models";
-
 export interface IGeolocationState {
-    geolocation: IGeolocationResponse | null
+    geolocation: string | null,
+    isError: boolean,
 }

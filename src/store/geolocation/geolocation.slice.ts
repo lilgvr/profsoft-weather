@@ -2,15 +2,21 @@ import { createSlice } from "@reduxjs/toolkit";
 import { IGeolocationState } from "../../types";
 
 const initialState: IGeolocationState = {
-    geolocation: null
+    geolocation: null,
+    isError: false
 }
 
 const geolocationSlice = createSlice({
     name: 'geolocation',
     initialState,
     reducers: {
-        setGeolocation: (state, action) => {
+        geolocationSuccess: (state, action) => {
             state.geolocation = action.payload;
+            state.isError = false;
+        },
+        geolocationError: (state, action) => {
+            state.geolocation = null;
+            state.isError = true;
         }
     }
 })

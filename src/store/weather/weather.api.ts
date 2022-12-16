@@ -8,7 +8,7 @@ const weatherApiOptions = {
     baseQuery: fetchBaseQuery({
         baseUrl: API_URL
     }),
-    refetchOnFocus: true,
+    // refetchOnFocus: true,
 }
 
 const weatherElements = [

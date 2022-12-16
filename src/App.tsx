@@ -1,20 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Layout } from "./layout";
 import { TodayPage } from "./pages/today";
 import { Route, Routes } from "react-router-dom";
 import { DayPage } from "./pages/day";
-import { useActions, useAppSelector } from "./hooks";
 
 function App() {
-    const { weather, isPositionError } = useAppSelector(state => state.weather);
-    const { setWeather } = useActions();
-
-    useEffect(() => {
-        if (weather && !isPositionError) {
-            setWeather(weather);
-        }
-    }, [isPositionError, setWeather, weather]);
-
     return (
         <>
             <Routes>

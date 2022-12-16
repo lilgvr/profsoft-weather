@@ -13,7 +13,8 @@ const Measure = lazy(() => import('../../components/measure/Measure'));
 const DayCard = lazy(() => import('../../components/today/day-card/DayCard'));
 
 const TodayPage: FC = () => {
-    const { weather, isPositionError } = useAppSelector(state => state.weather);
+    const { weather } = useAppSelector(state => state.weather);
+    const { isError } = useAppSelector(state => state.geolocation);
     const [cityData, setCityData] = useState<string[]>();
     const [days, setDays] = useState<IDay[]>();
 
@@ -24,16 +25,10 @@ const TodayPage: FC = () => {
         }
     }, [weather]);
 
-    useEffect(() => {
-        if (cityData) {
-
-        }
-    }, [cityData]);
-
     return (
         <>
             {
-                isPositionError ?
+                isError ?
                     <ErrorBlock message="Ошибка загрузки геолокации. Введите название города вручную."/> :
                     <main className={ styles.todayPageCtr }>
                         {

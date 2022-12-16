@@ -5,11 +5,11 @@ import { IGeolocationResponse } from "../../models";
 import { fromGeoResponseDto } from "../../utils/factories/geolocation.factory";
 
 const geolocationApiOptions = {
-    reducerPath: 'weather/api',
+    reducerPath: 'geolocation/api',
     baseQuery: fetchBaseQuery({
         baseUrl: GEO_API_URL
     }),
-    refetchOnFocus: true,
+    // refetchOnFocus: true,
 }
 
 export const geolocationApi = createApi({

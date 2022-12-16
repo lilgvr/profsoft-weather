@@ -7,21 +7,70 @@ import { useLazyGetGeolocationByCoordinatesQuery } from "../../store/geolocation
 
 export const Header: FC = () => {
     const [searchValue, setSearchValue] = useState<string>();
-    const [userPosition, setUserPosition] = useState<number[]>();
-    const [userLocation, setUserLocation] = useState<string>("");
-    const [isPositionError, setIsPositionError] = useState(false);
 
+    const { setWeather, geolocationSuccess, geolocationError } = useActions();
     const submitButton = useRef<HTMLButtonElement>(null);
-    const debounce = useDebounceButton(searchValue, 1000, submitButton);
+    const debounce = useDebounceButton(searchValue, 500, submitButton);
     const location = useLocation();
 
     const { weather } = useAppSelector(state => state.weather);
-    const { positionSuccess, positionError, setWeather } = useActions();
-    const [trigger, { data }] = useLazyGetWeekWeatherQuery();
+    const { geolocation, isError } = useAppSelector(state => state.geolocation);
 
-    const [geoTrigger, { data: geoData }] = useLazyGetGeolocationByCoordinatesQuery();
+    const [trigger, { data, error: weatherError }] = useLazyGetWeekWeatherQuery();
+    const [geoTrigger, { data: geoData, error: geoError }] = useLazyGetGeolocationByCoordinatesQuery();
 
     const success: PositionCallback = (position) => {
+        const { coords: { latitude, longitude } } = position;
+        const res = [latitude, longitude];
+
+        geolocationSuccess(res);
+    }
+
+    const error: PositionErrorCallback = (error) => {
+        console.log(error.message);
+        geolocationError(null);
+    }
+
+    useEffect(() => {
+        const options: PositionOptions = {
+            timeout: 5000,
+            maximumAge: Infinity,
+            enableHighAccuracy: true
+        }
+        console.log('render')
+        navigator.geolocation.getCurrentPosition(success, error, options);
+    }, []);
+
+    useEffect(() => { // fetch city name by [lat, lon]
+        if (geolocation && !isError) {
+            geoTrigger({ lat: geolocation[0], lon: geolocation[1] });
+        }
+    }, [trigger, geoTrigger, geolocation, isError]);
+
+    useEffect(() => {
+        if (geoData && !geoError) trigger({ location: geoData });
+
+        data && console.log(data);
+
+        setWeather(data);
+    }, [geoData, trigger]);
+
+    const handleInputChange = (e: FormEvent<HTMLInputElement>) => {
+        const target = e.target as HTMLInputElement;
+        setSearchValue(target.value);
+    }
+
+    const handleSubmit = () => {
+        if (submitButton.current?.disabled) return;
+
+        trigger({ location: debounce });
+        if(weatherError) console.log(weatherError)
+        data && console.log(data)
+        setWeather(data);
+    }
+
+
+    /*const success: PositionCallback = (position) => {
         const { coords: { latitude, longitude } } = position;
         const res = [latitude, longitude];
 
@@ -36,32 +85,29 @@ export const Header: FC = () => {
     }
 
     useEffect(() => {
-        const options: PositionOptions = {
-            timeout: 5000,
-            maximumAge: Infinity,
-            enableHighAccuracy: true
-        }
+            const options: PositionOptions = {
+                timeout: 5000,
+                maximumAge: Infinity,
+                enableHighAccuracy: true
+            }
         navigator.geolocation.getCurrentPosition(success, error, options);
     }, [setUserPosition]);
 
     useEffect(() => {
         if (userPosition && !isPositionError) {
-            setUserLocation(userPosition?.join());
             geoTrigger({ lat: userPosition[0], lon: userPosition[1] });
-            // trigger({ location: userLocation });
-            data && console.log(data);
+            geoData && trigger({ location: geoData });
+
+            data && console.log(data)
+            setWeather(data);
         }
-    }, [data, isPositionError, trigger, userLocation, userPosition]);
-
-    useEffect(() => {
-
-    }, [debounce]);
+    }, [isPositionError, trigger, userPosition, geoData, geoTrigger]);
 
     useEffect(() => {
         if (geoData) {
-            setUserLocation(geoData);
+            setGeolocation(geoData);
         }
-    }, [geoData]);
+    }, [geoData, setGeolocation]);
 
     const handleInputChange = (e: FormEvent<HTMLInputElement>) => {
         const target = e.target as HTMLInputElement;
@@ -71,8 +117,10 @@ export const Header: FC = () => {
     const handleSubmit = () => {
         if (submitButton.current?.disabled) return;
 
-        console.log('submit')
-    }
+        trigger({ location: searchValue });
+        data && console.log(data)
+        setWeather(data);
+    }*/
 
     return (
         <header className={ styles.headerWrapper }>
