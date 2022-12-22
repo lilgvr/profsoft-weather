@@ -1,0 +1,17 @@
+@import "../../../styles/colors";
+@import "../../../styles/variables";
+
+.headerMobileWrapper {
+    background-color: $primary-color;
+    height: 8vh;
+
+    .headerMobileCtr {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        height: 100%;
+        width: 90%;
+        margin: auto;
+    }
+}

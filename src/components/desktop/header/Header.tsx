@@ -1,16 +1,15 @@
 import React, { FC, FormEvent, useEffect, useRef, useState } from 'react';
 import styles from "./header.module.scss";
-import { useActions, useAppSelector, useDebounceButton } from "../../hooks";
+import { useActions, useAppSelector, useDebounceButton } from "../../../hooks";
 import { Link, useLocation } from "react-router-dom";
-import { useLazyGetWeekWeatherQuery } from "../../store/weather";
-import { useLazyGetGeolocationByCoordinatesQuery } from "../../store/geolocation";
+import { useLazyGetWeekWeatherQuery } from "../../../store/weather";
+import { useLazyGetGeolocationByCoordinatesQuery } from "../../../store/geolocation";
 
 export const Header: FC = () => {
     const [searchValue, setSearchValue] = useState<string>();
 
     const { setWeather, geolocationSuccess, geolocationError } = useActions();
     const submitButton = useRef<HTMLButtonElement>(null);
-    const debounce = useDebounceButton(searchValue, 500, submitButton);
     const location = useLocation();
 
     const { weather } = useAppSelector(state => state.weather);
@@ -63,8 +62,8 @@ export const Header: FC = () => {
     const handleSubmit = () => {
         if (submitButton.current?.disabled) return;
 
-        trigger({ location: debounce });
-        if(weatherError) console.log(weatherError)
+        trigger({ location: searchValue });
+        if (weatherError) console.log(weatherError)
         data && console.log(data)
         setWeather(data);
     }
