@@ -2,13 +2,11 @@ import React, { FC, FormEvent, useState } from 'react';
 import styles from "./header-mobile.module.scss";
 import { SvgIcon } from "../../common/svg-icon";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useActions, useAppSelector } from "../../../hooks";
-import { useLazyGetWeekWeatherQuery } from "../../../store/weather";
+import { useAppSelector } from "../../../hooks";
+import { GetWeather } from "../../common/get-weather/GetWeather";
 
 export const HeaderMobile: FC = () => {
     const { weather } = useAppSelector(state => state.weather);
-    const [trigger, { data, error: weatherError }] = useLazyGetWeekWeatherQuery();
-    const { setWeather } = useActions();
 
     const [isSearching, setIsSearching] = useState(false);
     const [searchValue, setSearchValue] = useState("");
@@ -27,18 +25,8 @@ export const HeaderMobile: FC = () => {
         setSearchValue(target.value);
     }
 
-    const handleSearchInactiveClick = () => {
-        setIsSearching(true);
-    }
-
-    const handleSearchActiveClick = () => {
-        trigger({ location: searchValue });
-        if (weatherError) console.log(weatherError)
-        if (data) {
-            console.log(data);
-            setSearchValue("");
-        }
-        setWeather(data);
+    const handleSearchClick = () => {
+        setIsSearching(!isSearching);
     }
 
     const handleCloseClick = () => {
@@ -48,6 +36,7 @@ export const HeaderMobile: FC = () => {
 
     return (
         <header className={ styles.headerMobileWrapper }>
+            <GetWeather searchValue={ searchValue } handlers={ { mobileSearchClick: isSearching } }/>
             <div className={ styles.headerMobileCtr }>
                 {
                     !isSearching ?
@@ -66,7 +55,7 @@ export const HeaderMobile: FC = () => {
                         </>
 
                 }
-                <SvgIcon name="search" onClick={ isSearching ? handleSearchActiveClick : handleSearchInactiveClick }/>
+                <SvgIcon name="search" onClick={ handleSearchClick }/>
             </div>
         </header>
     );

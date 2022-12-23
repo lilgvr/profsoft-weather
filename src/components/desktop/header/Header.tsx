@@ -1,17 +1,24 @@
-import React, { FC, FormEvent, useCallback, useEffect, useState } from 'react';
+import React, { FC, FormEvent, useCallback, useContext, useEffect, useState } from 'react';
 import styles from "./header.module.scss";
 import { useActions, useAppSelector } from "../../../hooks";
 import { Link, useLocation } from "react-router-dom";
 import { useLazyGetWeekWeatherQuery } from "../../../store/weather";
 import { useLazyGetGeolocationByCoordinatesQuery } from "../../../store/geolocation";
 import { SvgIcon } from "../../common/svg-icon";
+import { GetWeather } from "../../common/get-weather/GetWeather";
 
 export const Header: FC = () => {
-    const [searchValue, setSearchValue] = useState<string>();
-
-    const { setWeather, geolocationSuccess, geolocationError } = useActions();
+    const [searchValue, setSearchValue] = useState<string>("");
+    const [submitClick, setSubmitClick] = useState(false);
+    const [locationClick, setLocationClick] = useState(false);
 
     const { weather } = useAppSelector(state => state.weather);
+
+    const location = useLocation();
+
+    // const { setWeather, geolocationSuccess, geolocationError } = useActions();
+
+    /*const { weather } = useAppSelector(state => state.weather);
     const { geolocation, isError } = useAppSelector(state => state.geolocation);
 
     const [trigger, { data, error: weatherError, isSuccess }] = useLazyGetWeekWeatherQuery();
@@ -60,7 +67,7 @@ export const Header: FC = () => {
         }
 
         fetch()
-    }, [isGeoSuccess, geolocation, isError]);
+    }, [isGeoSuccess, geolocation, isError]);*/
 
     /*
     * ================= Handlers =================
@@ -73,20 +80,23 @@ export const Header: FC = () => {
     }
 
     const handleSubmit = () => {
-        const fetch = async () => {
+        /*const fetch = async () => {
             await trigger({ location: searchValue });
             if (data) setWeather(data);
         }
 
-        fetch();
+        fetch();*/
+        setSubmitClick(!submitClick);
     }
 
     const handleLocationClick = () => {
-        getGeolocation();
+        // getGeolocation();
+        setLocationClick(!locationClick);
     }
 
     return (
         <header className={ styles.headerWrapper }>
+            <GetWeather searchValue={ searchValue } handlers={ { submitClick, locationClick } }/>
             <div className={ styles.headerCtr }>
                 <h1>Weather</h1>
 
