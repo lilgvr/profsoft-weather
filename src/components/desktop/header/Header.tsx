@@ -1,6 +1,6 @@
-import React, { FC, FormEvent, useEffect, useRef, useState } from 'react';
+import React, { FC, FormEvent, useEffect, useState } from 'react';
 import styles from "./header.module.scss";
-import { useActions, useAppSelector, useDebounceButton } from "../../../hooks";
+import { useActions, useAppSelector } from "../../../hooks";
 import { Link, useLocation } from "react-router-dom";
 import { useLazyGetWeekWeatherQuery } from "../../../store/weather";
 import { useLazyGetGeolocationByCoordinatesQuery } from "../../../store/geolocation";
@@ -9,7 +9,6 @@ export const Header: FC = () => {
     const [searchValue, setSearchValue] = useState<string>();
 
     const { setWeather, geolocationSuccess, geolocationError } = useActions();
-    const submitButton = useRef<HTMLButtonElement>(null);
     const location = useLocation();
 
     const { weather } = useAppSelector(state => state.weather);
@@ -60,8 +59,6 @@ export const Header: FC = () => {
     }
 
     const handleSubmit = () => {
-        if (submitButton.current?.disabled) return;
-
         trigger({ location: searchValue });
         if (weatherError) console.log(weatherError)
         data && console.log(data)
@@ -139,7 +136,6 @@ export const Header: FC = () => {
                         />
                         <button
                             type="submit"
-                            ref={ submitButton }
                             onClick={ handleSubmit }
                         >
                             Поиск

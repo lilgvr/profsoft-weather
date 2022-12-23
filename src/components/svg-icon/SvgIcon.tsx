@@ -1,20 +1,24 @@
 import React, { FC, useEffect, useState } from 'react';
+import styles from "./svg-icon.module.scss";
 
-export const SvgIcon: FC<{ path: string, onClick?: () => void }> = ({ path, onClick }) => {
+export const SvgIcon: FC<{ name: string, onClick?: () => void }> = ({ name, onClick }) => {
     const [svgIcon, setSvgIcon] = useState();
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        import(`/src/assets/icons/${ path }.svg`).then(img => {
+        import(`/src/assets/icons/${ name }.svg`).then(img => {
             setSvgIcon(img.default);
             setIsLoading(false);
         }).catch(err => {
             console.log(err)
         });
-    }, [path]);
+    }, [name]);
 
     return (
-        <div onClick={ onClick }>
+        <div
+            className={ styles.svgIcon }
+            onClick={ onClick }
+        >
             {
                 isLoading ?
                     <p>Загузка...</p> :

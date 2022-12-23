@@ -1,5 +1,6 @@
 @import "../../../styles/colors";
 @import "../../../styles/variables";
+@import "../../../styles/mixins";
 
 .headerMobileWrapper {
     background-color: $primary-color;
@@ -13,5 +14,15 @@
         height: 100%;
         width: 90%;
         margin: auto;
+
+        h1 {
+            font-size: 5vw;
+            font-weight: 600;
+            color: $white;
+        }
+
+        input {
+            @include customInput(4vw);
+        }
     }
 }
