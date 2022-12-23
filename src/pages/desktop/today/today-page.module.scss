@@ -1,7 +1,7 @@
-@import '/src/styles/colors';
-@import '/src/styles/mixins';
+@import '../../../styles/colors';
+@import '../../../styles/mixins';
 
-.todayPageCtr {
+.dayPageCtr {
     .mainInfo {
         @include mainInfo;
     }
