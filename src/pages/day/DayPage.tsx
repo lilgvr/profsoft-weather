@@ -5,8 +5,8 @@ import { IDay } from "../../models";
 import styles from "./day-page.module.scss";
 import { getDirection, getLocalizedDate } from "../../utils";
 import { splitFirst, splitLast } from "../../utils/service/StringService";
-import WeatherIcon from "../../components/weather-icon/WeatherIcon";
-import Measure from "../../components/measure/Measure";
+import WeatherIcon from "../../components/common/weather-icon/WeatherIcon";
+import Measure from "../../components/common/measure/Measure";
 
 export const DayPage: FC = () => {
     const { date } = useParams();

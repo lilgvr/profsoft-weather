@@ -1,10 +1,10 @@
 import React, { FC, lazy } from 'react';
-import { IDay } from "../../../models";
+import { IDay } from "../../../../models";
 import styles from "./day-card.module.scss";
-import { getLocalizedDate } from "../../../utils";
+import { getLocalizedDate } from "../../../../utils";
 import { useNavigate } from "react-router-dom";
 
-const WeatherIcon = lazy(() => import('../../../components/weather-icon/WeatherIcon'));
+const WeatherIcon = lazy(() => import('../../../common/weather-icon/WeatherIcon'));
 
 const DayCard: FC<{ day: IDay }> = ({ day }) => {
     const { datetime, icon, conditions, temp, feelslike } = day;
