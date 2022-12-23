@@ -1,3 +1,59 @@
-.carouselCtr{
+@import '../../../styles/colors';
+@import '../../../styles/mixins';
 
+.carouselCtr {
+    height: 46vh;
+    color: $white;
+
+    .carousel {
+        width: 100%;
+
+        & > div {
+            width: 100%;
+        }
+
+        & > p {
+            width: fit-content;
+            font-size: 6vw;
+            margin: auto;
+        }
+
+        &Temp {
+            display: flex;
+            flex-direction: row;
+
+            p {
+                font-size: 18vw;
+            }
+        }
+
+        &Info {
+
+        }
+
+        &Measures {
+
+        }
+
+    }
+}
+
+.carouselIndicatorCtr {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+    gap: 1vw;
+
+    .carouselDot {
+        background-color: $accent-color;
+        border-radius: 50%;
+        $wh: 2vw;
+        width: $wh;
+        height: $wh;
+
+        &.active {
+            background-color: $white;
+        }
+    }
 }

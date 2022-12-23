@@ -3,7 +3,7 @@ import styles from "./weather-icon.module.scss";
 
 const WeatherIcon: FC<{
     icon: string,
-    caption: string,
+    caption?: string,
     className?: string
 }> = ({ icon, caption, className }) => {
     const [svgIcon, setSvgIcon] = useState();

@@ -1,3 +1,17 @@
-.todayPageCtrMobile {
+@import '../../../styles/colors';
 
+.todayPageCtrMobile {
+    .cityDataCtr {
+        height: 10vh;
+
+        h2 {
+            color: $white;
+            font-size: 7vw;
+        }
+
+        h3 {
+            color: $accent-color;
+            font-size: 4vw;
+        }
+    }
 }
