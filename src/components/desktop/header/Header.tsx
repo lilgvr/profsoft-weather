@@ -1,68 +1,112 @@
-import React, { FC, FormEvent, useEffect, useState } from 'react';
+import React, { FC, FormEvent, useCallback, useEffect, useState } from 'react';
 import styles from "./header.module.scss";
 import { useActions, useAppSelector } from "../../../hooks";
 import { Link, useLocation } from "react-router-dom";
 import { useLazyGetWeekWeatherQuery } from "../../../store/weather";
 import { useLazyGetGeolocationByCoordinatesQuery } from "../../../store/geolocation";
+import { SvgIcon } from "../../common/svg-icon";
 
 export const Header: FC = () => {
     const [searchValue, setSearchValue] = useState<string>();
 
     const { setWeather, geolocationSuccess, geolocationError } = useActions();
-    const location = useLocation();
 
     const { weather } = useAppSelector(state => state.weather);
     const { geolocation, isError } = useAppSelector(state => state.geolocation);
 
-    const [trigger, { data, error: weatherError }] = useLazyGetWeekWeatherQuery();
-    const [geoTrigger, { data: geoData, error: geoError }] = useLazyGetGeolocationByCoordinatesQuery();
+    const [trigger, { data, error: weatherError, isSuccess }] = useLazyGetWeekWeatherQuery();
+    const [geoTrigger, {
+        data: geoData,
+        error: geoError,
+        isSuccess: isGeoSuccess,
+    }] = useLazyGetGeolocationByCoordinatesQuery();
 
-    const success: PositionCallback = (position) => {
-        const { coords: { latitude, longitude } } = position;
-        const res = [latitude, longitude];
+    const location = useLocation();
 
-        geolocationSuccess(res);
-    }
+    const getGeolocation = useCallback(() => {
+        const success: PositionCallback = (position) => {
+            const { latitude, longitude } = position.coords;
 
-    const error: PositionErrorCallback = (error) => {
-        console.log(error.message);
-        geolocationError(null);
-    }
+            geolocationSuccess([latitude, longitude]);
+        }
 
-    useEffect(() => {
+        const error: PositionErrorCallback = (error) => {
+            console.log(error.message);
+            geolocationError(null);
+        }
+
         const options: PositionOptions = {
             timeout: 5000,
             maximumAge: Infinity,
             enableHighAccuracy: true
         }
-        console.log('render')
         navigator.geolocation.getCurrentPosition(success, error, options);
     }, []);
 
-    useEffect(() => { // fetch city name by [lat, lon]
-        if (geolocation && !isError) {
-            geoTrigger({ lat: geolocation[0], lon: geolocation[1] });
+    /*useEffect(() => { // get user geolocation
+        const success: PositionCallback = (position) => {
+            const { latitude, longitude } = position.coords;
+
+            geolocationSuccess([latitude, longitude]);
         }
-    }, [trigger, geoTrigger, geolocation, isError]);
+
+        const error: PositionErrorCallback = (error) => {
+            console.log(error.message);
+            geolocationError(null);
+        }
+
+        const options: PositionOptions = {
+            timeout: 5000,
+            maximumAge: Infinity,
+            enableHighAccuracy: true
+        }
+        navigator.geolocation.getCurrentPosition(success, error, options);
+    }, []);*/
+
+    /*useEffect(() => {
+        getGeolocation();
+    }, []);*/
 
     useEffect(() => {
-        if (geoData && !geoError) trigger({ location: geoData });
+        getGeolocation();
+    }, []);
 
-        data && console.log(data);
+    useEffect(() => { // fetch city name by coordinates
+        const fetch = async () => {
+            if (geolocation) {
+                await geoTrigger({ lat: geolocation[0], lon: geolocation[1] });
 
-        setWeather(data);
-    }, [geoData, trigger]);
+                if (geoData) {
+                    await trigger({ location: geoData });
+                    if (data) setWeather(data)
+                }
+            }
+        }
+
+        fetch()
+    }, [isGeoSuccess, geolocation, isError]);
+
+    /*
+    * ================= Handlers =================
+    *
+    * */
 
     const handleInputChange = (e: FormEvent<HTMLInputElement>) => {
         const target = e.target as HTMLInputElement;
-        setSearchValue(target.value);
+        setSearchValue(() => target.value);
     }
 
     const handleSubmit = () => {
-        trigger({ location: searchValue });
-        if (weatherError) console.log(weatherError)
-        data && console.log(data)
-        setWeather(data);
+        const fetch = async () => {
+            await trigger({ location: searchValue });
+            if (data) setWeather(data);
+        }
+
+        fetch();
+    }
+
+    const handleLocationClick = () => {
+        getGeolocation();
     }
 
 
@@ -124,6 +168,7 @@ export const Header: FC = () => {
                 <h1>Weather</h1>
 
                 <div className={ styles.searchCtr }>
+                    <SvgIcon name="location" onClick={ handleLocationClick }/>
                     <div>
                         <label htmlFor="city-input">
                             Город:

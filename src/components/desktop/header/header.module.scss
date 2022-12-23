@@ -82,6 +82,14 @@
                     cursor: pointer;
                 }
             }
+
+            img {
+                margin-right: 1vw;
+
+                &:hover {
+                    cursor: pointer;
+                }
+            }
         }
     }
 }

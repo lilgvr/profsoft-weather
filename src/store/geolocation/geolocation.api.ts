@@ -9,7 +9,7 @@ const geolocationApiOptions = {
     baseQuery: fetchBaseQuery({
         baseUrl: GEO_API_URL
     }),
-    // refetchOnFocus: true,
+    refetchOnFocus: true,
 }
 
 export const geolocationApi = createApi({

@@ -1,6 +1,6 @@
 import React, { FC, FormEvent, useState } from 'react';
 import styles from "./header-mobile.module.scss";
-import { SvgIcon } from "../../svg-icon";
+import { SvgIcon } from "../../common/svg-icon";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useActions, useAppSelector } from "../../../hooks";
 import { useLazyGetWeekWeatherQuery } from "../../../store/weather";

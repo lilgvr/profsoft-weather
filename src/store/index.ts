@@ -1,8 +1,10 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { setupListeners } from "@reduxjs/toolkit/query";
-import { weatherApi } from "./weather";
-import { weatherReducer } from "./weather";
+import { weatherApi, weatherReducer } from "./weather";
 import { geolocationApi, geolocationReducer } from "./geolocation";
+import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE, } from 'redux-persist';
+import storage from 'redux-persist/lib/storage'
+import thunk from 'redux-thunk';
 
 export const rootReducer = combineReducers({
     [weatherApi.reducerPath]: weatherApi.reducer,
@@ -11,16 +13,31 @@ export const rootReducer = combineReducers({
     geolocation: geolocationReducer
 })
 
+const persistConfig = {
+    key: 'weather',
+    version: 1,
+    storage,
+}
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
 export const store = configureStore({
-        reducer: rootReducer,
-        middleware: getDefaultMiddleware => getDefaultMiddleware().concat(
+        reducer: persistedReducer,
+        middleware: getDefaultMiddleware => getDefaultMiddleware({
+            serializableCheck: {
+                ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
+            }
+        }).concat(
+            thunk,
             weatherApi.middleware,
             geolocationApi.middleware
-        )
+        ),
     })
 ;
 
 setupListeners(store.dispatch);
+
+export const persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch;

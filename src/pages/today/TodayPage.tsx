@@ -20,8 +20,8 @@ const TodayPage: FC = () => {
 
     useEffect(() => {
         if (weather) {
-            setCityData(splitFirst(weather.resolvedAddress, ','));
-            setDays(weather.days);
+            setCityData(() => splitFirst(weather.resolvedAddress, ','));
+            setDays(() => weather.days);
         }
     }, [weather]);
 
