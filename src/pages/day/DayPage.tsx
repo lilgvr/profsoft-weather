@@ -22,13 +22,8 @@ export const DayPage: FC = () => {
     }, [date, weather]);
 
     useEffect(() => {
-        console.log(currentDayMemo)
         setCurrentDay(() => currentDayMemo)
     }, [currentDayMemo]);
-
-    useEffect(() => {
-        console.log(weather)
-    }, [weather]);
 
     return (
         <main className={ styles.dayPageWrapper }>
