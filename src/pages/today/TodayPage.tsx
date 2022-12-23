@@ -1,6 +1,6 @@
 import { FC, lazy, useEffect, useState } from "react";
-import { TodayCtr } from "../../components/desktop/today/today-ctr";
-import { DaysCtr } from "../../components/desktop/today/days-ctr";
+import { TodayCtr } from "../../components/desktop/today-ctr";
+import { DaysCtr } from "../../components/desktop/days-ctr";
 import { useAppSelector } from "../../hooks";
 import { splitFirst, splitLast } from "../../utils/service/StringService";
 import { IDay } from "../../models";
@@ -10,7 +10,7 @@ import { ErrorBlock } from "../../components/common/error-block";
 
 const WeatherIcon = lazy(() => import('../../components/common/weather-icon/WeatherIcon'));
 const Measure = lazy(() => import('../../components/common/measure/Measure'));
-const DayCard = lazy(() => import('../../components/desktop/today/day-card/DayCard'));
+const DayCard = lazy(() => import('../../components/desktop/day-card/DayCard'));
 
 const TodayPage: FC = () => {
     const { weather } = useAppSelector(state => state.weather);
