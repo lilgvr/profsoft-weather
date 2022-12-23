@@ -61,10 +61,10 @@ export const Carousel: FC = () => {
                                 <p>Ощущается как <span>{ currentDay.feelslike }</span></p>
                                 <p>{ currentDay.conditions }</p>
                             </div>
+                        </div>
 
-                            <div className={ styles.carouselMeasures }>
+                        <div className={ styles.carouselMeasures }>
 
-                            </div>
                         </div>
                     </section>
                     : <ErrorBlock message=""/>
