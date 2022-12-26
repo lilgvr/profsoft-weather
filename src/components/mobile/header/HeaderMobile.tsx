@@ -10,6 +10,8 @@ export const HeaderMobile: FC = () => {
 
     const [isSearching, setIsSearching] = useState(false);
     const [searchValue, setSearchValue] = useState("");
+    const [locationClick, setLocationClick] = useState(false);
+    const [searchingData, setSearchingData] = useState(false);
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -25,8 +27,12 @@ export const HeaderMobile: FC = () => {
         setSearchValue(target.value);
     }
 
-    const handleSearchClick = () => {
-        setIsSearching(!isSearching);
+    const handleSearchInactiveClick = () => {
+        setIsSearching(true);
+    }
+
+    const handleSearchActiveClick = () => {
+        setSearchingData(!searchingData);
     }
 
     const handleCloseClick = () => {
@@ -34,19 +40,21 @@ export const HeaderMobile: FC = () => {
         setSearchValue("");
     }
 
+    const handleLocationClick = () => {
+        setLocationClick(!locationClick);
+    }
+
     return (
         <header className={ styles.headerMobileWrapper }>
-            <GetWeather searchValue={ searchValue } handlers={ { mobileSearchClick: isSearching } }/>
+            <GetWeather searchValue={ searchValue } handlers={ { mobileSearchClick: searchingData } }/>
             <div className={ styles.headerMobileCtr }>
                 {
                     !isSearching ?
                         <>
-                            <SvgIcon name={ location.pathname === "/" ? "today" : "week" }
-                                     onClick={
-                                         () => {
-                                             handleTodayClick(location.pathname === "/" ? "today" : "week")
-                                         }
-                                     }/>
+                            <SvgIcon
+                                name="location"
+                                onClick={ handleLocationClick }
+                            />
                             <h1>Weather</h1>
                         </> :
                         <>
@@ -55,7 +63,7 @@ export const HeaderMobile: FC = () => {
                         </>
 
                 }
-                <SvgIcon name="search" onClick={ handleSearchClick }/>
+                <SvgIcon name="search" onClick={ isSearching ? handleSearchActiveClick : handleSearchInactiveClick }/>
             </div>
         </header>
     );

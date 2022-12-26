@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import styles from "./today-page.module.scss";
 import { useAppSelector } from "../../../hooks";
 import { splitFirst } from "../../../utils/service/StringService";
-import { Carousel } from "../carousel";
+import { Carousel } from "../../../components/mobile/carousel";
 
 export const TodayPageMobile: FC = () => {
     const { weather } = useAppSelector(state => state.weather);

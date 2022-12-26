@@ -2,12 +2,5 @@
 @import '../../../styles/mixins';
 
 .svgIcon {
-    img{
-        height: 100%;
-        width: 5vh;
-    }
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include svg-icon(5vh);
 }

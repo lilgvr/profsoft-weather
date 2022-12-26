@@ -2,11 +2,10 @@
 @import '../../../styles/mixins';
 
 .carouselCtr {
-    height: 82vh;
     color: $white;
 
     .carousel {
-        height: 46vh;
+        height: 46vh; //46
         width: 100%;
 
         & > div {
@@ -14,6 +13,7 @@
         }
 
         & > p {
+            transition: all .5s ease-in-out;
             width: fit-content;
             font-size: 6vw;
             margin: auto;
@@ -23,19 +23,19 @@
             display: flex;
             flex-direction: row;
             justify-content: space-between;
+            padding: 10vw;
 
             p {
                 font-size: 18vw;
             }
 
-            .weatherIconCtr {
-                @include weather-icon;
-                height: 100%;
-                width: 100%;
+            .svgIcon {
+                @include svg-icon(10vh);
             }
         }
 
         &Info {
+            padding-left: 2vh;
             p {
                 font-size: 5vw;
 
@@ -49,6 +49,7 @@
 
                 &:last-of-type {
                     color: $accent-color;
+                    margin-top: 2vh;
                 }
             }
         }
@@ -56,7 +57,7 @@
 
     .carouselMeasures {
         width: 100%;
-        height: 36vh;
+        height: 38vh; // 36
         background: linear-gradient(180deg, $primary-color 0%, $background-color 19.37%);
     }
 }
@@ -67,10 +68,11 @@
     width: 100%;
     justify-content: center;
     gap: 1.5vw;
-    height: 2vw;
-    margin: 4vw 0;
+    height: 2vh;
+    margin: 2vh 0;
 
     .carouselDot {
+        transition: background-color .25s ease-in-out;
         background-color: $accent-color;
         border-radius: 50%;
         $wh: 2vw;

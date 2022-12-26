@@ -1,4 +1,4 @@
 export interface IGeolocationState {
-    geolocation: string | null,
+    geolocation: number[] | null,
     isError: boolean,
 }

@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useActions, useAppSelector } from "../../../hooks";
 import { useLazyGetWeekWeatherQuery } from "../../../store/weather";
 import { useLazyGetGeolocationByCoordinatesQuery } from "../../../store/geolocation";
@@ -10,25 +10,30 @@ type Handlers = {
 };
 
 export const GetWeather: FC<{ searchValue: string, handlers?: Handlers }> = ({ searchValue, handlers }) => {
-    const { geolocation, isError } = useAppSelector(state => state.geolocation);
+    const { geolocation } = useAppSelector(state => state.geolocation);
     const { setWeather, geolocationSuccess, geolocationError } = useActions();
 
-    const [trigger, { data }] = useLazyGetWeekWeatherQuery();
-    const [geoTrigger, {
-        data: geoData,
-        isSuccess: isGeoSuccess,
-    }] = useLazyGetGeolocationByCoordinatesQuery();
+    const [trigger, { data, error: weatherError }] = useLazyGetWeekWeatherQuery();
+    const [geoTrigger, { data: geoData, }] = useLazyGetGeolocationByCoordinatesQuery();
+    const [geoSuccess, setGeoSuccess] = useState(false);
+    const [geoError, setGeoError] = useState(false);
+    const [coords, setCoords] = useState<number[]>([]);
 
     const getGeolocation = useCallback(() => { // get user geolocation
         const success: PositionCallback = (position) => {
-            const { latitude, longitude } = position.coords;
+            const { latitude, longitude } = position.coords
+            setCoords([latitude, longitude]);
+            setGeoSuccess(true);
+            setGeoError(false);
 
-            geolocationSuccess([latitude, longitude]);
+            // geolocationSuccess([latitude, longitude]);
         }
 
         const error: PositionErrorCallback = (error) => {
             console.log(error.message);
-            geolocationError(null);
+            setGeoError(true);
+            setGeoSuccess(false);
+            // geolocationError(null);
         }
 
         const options: PositionOptions = {
@@ -40,41 +45,45 @@ export const GetWeather: FC<{ searchValue: string, handlers?: Handlers }> = ({ s
     }, []);
 
     useEffect(() => {
-        getGeolocation();
-    }, []);
-
-    useEffect(() => { // fetch city name and weather
-        const fetch = async () => {
-            if (geolocation) {
-                await geoTrigger({ lat: geolocation[0], lon: geolocation[1] });
-
-                if (geoData) {
-                    await trigger({ location: geoData });
-                    if (data) setWeather(data)
-                }
-            }
-        }
-
-        fetch()
-    }, [isGeoSuccess, geolocation, isError]);
+        if (geoSuccess) geolocationSuccess(coords);
+    }, [coords, geoSuccess]);
 
     useEffect(() => {
-        getGeolocation();
-    }, [handlers?.locationClick]);
+        if (geoError) geolocationError(null);
+    }, [coords, geoError]);
 
-    const fetch = useCallback(async () => {
+    const fetchSearch = useCallback(async () => {
         if (searchValue) {
             await trigger({ location: searchValue });
-            if (data) setWeather(data);
+            if (data) {
+                setWeather(data);
+            }
         }
-    }, [data, searchValue, setWeather, trigger]);
+    }, [searchValue]);
+
+    const fetchGeolocation = useCallback(async () => {
+        if (geolocation) {
+            await geoTrigger({ lat: geolocation[0], lon: geolocation[1] });
+
+            if (geoData) {
+                await trigger({ location: geoData });
+                if (weatherError) console.log(weatherError)
+                if (data) setWeather(data);
+            }
+        }
+    }, [geolocation]);
 
     useEffect(() => {
-        fetch()
+        getGeolocation();
+        fetchGeolocation();
+    }, [handlers?.locationClick]);
+
+    useEffect(() => {
+        if (searchValue) fetchSearch()
     }, [handlers?.submitClick]);
 
     useEffect(() => {
-        if (!handlers?.mobileSearchClick) fetch();
+        if (searchValue) fetchSearch();
     }, [handlers?.mobileSearchClick]);
 
     return (<></>);

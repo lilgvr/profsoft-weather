@@ -94,3 +94,14 @@
         font-size: 1.5vw;
     }
 }
+
+@mixin svg-icon($width) {
+    img{
+        height: 100%;
+        width: 5vh;
+    }
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
